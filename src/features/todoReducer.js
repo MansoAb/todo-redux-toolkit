@@ -18,7 +18,10 @@ export const deleteTodo = createAction("delete");
 export const todoReducer = createReducer(initialState, (build) => {
   build
     .addCase(changeBl, (state, action) => {
-      state[action.payload].bl = !state[action.payload].bl;
+      return state.map((item, index) => {
+        console.log(index, action.payload);
+        return index === action.payload ? { ...item, bl: !item.bl } : item;
+      });
     })
     .addCase(add, (state, action) => {
       state.unshift({
@@ -26,6 +29,8 @@ export const todoReducer = createReducer(initialState, (build) => {
       });
     })
     .addCase(deleteTodo, (state, action) => {
-      state.splice(action.payload, 1);
+      return state.filter((item, index) => {
+        return index != action.payload ? item : null;
+      });
     });
 });
